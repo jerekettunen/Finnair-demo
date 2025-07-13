@@ -3,7 +3,7 @@ import { Construct, Node } from 'constructs'
 import { Table, AttributeType, BillingMode } from 'aws-cdk-lib/aws-dynamodb'
 import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs'
 import { ServicePrincipal } from 'aws-cdk-lib/aws-iam'
-import Mustache from 'mustache'
+// import Mustache from 'mustache'
 import * as apigateway from 'aws-cdk-lib/aws-apigateway'
 import { readFileSync } from 'fs'
 import path from 'path'
@@ -138,53 +138,38 @@ export class FinnairStack extends cdk.Stack {
     })
 
     // Create the API Gateway using OpenAPI specification
-    const variables = {
-      region: 'eu-north-1',
-      get_passenger_function_arn: this.resolve(getPassengerById.functionArn),
-      get_flight_passengers_function_arn: this.resolve(
-        getPassengers.functionArn
-      ),
-      seed_data_function_arn: this.resolve(seedDataLambda.functionArn),
-    }
 
-    console.log('🔍 Mustache variables:', JSON.stringify(variables, null, 2))
-
-    const renderedSpec = Mustache.render(
-      readFileSync(path.join(__dirname, '../openapi-spec.json'), 'utf8'),
-      variables
+    const openApiSpec = JSON.parse(
+      readFileSync(path.join(__dirname, '../openapi-spec.json'), 'utf8')
     )
-
-    console.log('🔍 Rendered OpenAPI spec (first 1000 chars):', renderedSpec)
-    console.log('🔍 Looking for integration URIs:')
-    console.log(
-      'Passengers integration:',
-      renderedSpec.includes('get_flight_passengers_function_arn')
-        ? '❌ NOT REPLACED'
-        : '✅ REPLACED'
-    )
-    console.log(
-      'Passenger by ID integration:',
-      renderedSpec.includes('get_passenger_function_arn')
-        ? '❌ NOT REPLACED'
-        : '✅ REPLACED'
-    )
-    console.log(
-      'Seed integration:',
-      renderedSpec.includes('seed_data_function_arn')
-        ? '❌ NOT REPLACED'
-        : '✅ REPLACED'
-    )
-
-    const openApiSpecJson = JSON.parse(renderedSpec) // Parse to object
 
     const api = new apigateway.SpecRestApi(this, 'CrewPasApi', {
-      apiDefinition: apigateway.ApiDefinition.fromInline(openApiSpecJson),
+      apiDefinition: apigateway.ApiDefinition.fromInline(openApiSpec),
       restApiName: 'CrewPas API',
       description: 'API for Finnair Crew Passenger Management',
       deployOptions: {
         stageName: 'prod',
       },
     })
+
+    const cfnApi = api.node.defaultChild as apigateway.CfnRestApi
+    // For GET /passengers
+    cfnApi.addPropertyOverride(
+      'Body.paths./passengers.get.x-amazon-apigateway-integration.uri',
+      `arn:aws:apigateway:${this.region}:lambda:path/2015-03-31/functions/${getPassengers.functionArn}/invocations`
+    )
+
+    // For GET /passengers/{passengerId}
+    cfnApi.addPropertyOverride(
+      'Body.paths./passengers/{passengerId}.get.x-amazon-apigateway-integration.uri',
+      `arn:aws:apigateway:${this.region}:lambda:path/2015-03-31/functions/${getPassengerById.functionArn}/invocations`
+    )
+
+    // For POST /utils/seed
+    cfnApi.addPropertyOverride(
+      'Body.paths./utils/seed.post.x-amazon-apigateway-integration.uri',
+      `arn:aws:apigateway:${this.region}:lambda:path/2015-03-31/functions/${seedDataLambda.functionArn}/invocations`
+    )
 
     new cdk.CfnOutput(this, 'ApiUrl', {
       value: api.url,

@@ -53,16 +53,16 @@
           "500": {
             "description": "Internal server error"
           }
-        }
-      },
-      "x-amazon-apigateway-integration": {
-        "uri": "arn:aws:apigateway:{{region}}:lambda:path/2015-03-31/functions/{{get_flight_passengers_function_arn}}/invocations",
-        "httpMethod": "POST",
-        "type": "aws_proxy",
-        "passthroughBehavior": "when_no_match",
-        "responses": {
-          "default": {
-            "statusCode": "200"
+        },
+        "x-amazon-apigateway-integration": {
+          "uri": "PLACEHOLDER_GET_PASSENGERS_URI",
+          "httpMethod": "POST",
+          "type": "aws_proxy",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
           }
         }
       }
@@ -103,16 +103,16 @@
           "500": {
             "description": "Internal server error"
           }
-        }
-      },
-      "x-amazon-apigateway-integration": {
-        "uri": "arn:aws:apigateway:{{region}}:lambda:path/2015-03-31/functions/{{get_passenger_function_arn}}/invocations",
-        "httpMethod": "POST",
-        "type": "aws_proxy",
-        "passthroughBehavior": "when_no_match",
-        "responses": {
-          "default": {
-            "statusCode": "200"
+        },
+        "x-amazon-apigateway-integration": {
+          "uri": "PLACEHOLDER_GET_PASSENGER_BY_ID_URI",
+          "httpMethod": "POST",
+          "type": "aws_proxy",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
           }
         }
       }
@@ -136,16 +136,16 @@
           "500": {
             "description": "Internal server error"
           }
-        }
-      },
-      "x-amazon-apigateway-integration": {
-        "uri": "arn:aws:apigateway:{{region}}:lambda:path/2015-03-31/functions/{{seed_data_function_arn}}/invocations",
-        "httpMethod": "POST",
-        "type": "aws_proxy",
-        "passthroughBehavior": "when_no_match",
-        "responses": {
-          "default": {
-            "statusCode": "200"
+        },
+        "x-amazon-apigateway-integration": {
+          "uri": "PLACEHOLDER_SEED_DATA_URI",
+          "httpMethod": "POST",
+          "type": "aws_proxy",
+          "passthroughBehavior": "when_no_match",
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
           }
         }
       }

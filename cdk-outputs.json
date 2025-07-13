@@ -1,0 +1,8 @@
+{
+  "FinnairStack": {
+    "CrewPasApiEndpointF28BDF30": "https://84zylh4zxf.execute-api.eu-north-1.amazonaws.com/prod/",
+    "ApiUrl": "https://84zylh4zxf.execute-api.eu-north-1.amazonaws.com/prod/",
+    "SeedDataUrl": "https://84zylh4zxf.execute-api.eu-north-1.amazonaws.com/prod/utils/seed",
+    "TestEndpoints": "{\"getPassengers\":\"https://84zylh4zxf.execute-api.eu-north-1.amazonaws.com/prod/passengers?flightNumber=AY123&departureDate=2024-01-15\",\"getPassengerById\":\"https://84zylh4zxf.execute-api.eu-north-1.amazonaws.com/prod/passengers/PAX001\",\"seedData\":\"https://84zylh4zxf.execute-api.eu-north-1.amazonaws.com/prod/utils/seed\"}"
+  }
+}
