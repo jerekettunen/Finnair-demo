@@ -1,0 +1,63 @@
+{
+  "PassengerSummary": {
+    "type": "object",
+    "properties": {
+      "passengerId": {
+        "type": "string",
+        "description": "Unique identifier for the passenger"
+      },
+      "firstName": {
+        "type": "string",
+        "description": "First name of the passenger"
+      },
+      "lastName": {
+        "type": "string",
+        "description": "Last name of the passenger"
+      },
+      "bookingId": {
+        "$ref": "common.json/#/BookingId"
+      }
+    },
+    "required": ["passengerId", "firstName", "lastName", "bookingId"]
+  },
+  "PassengerDetails": {
+    "type": "object",
+    "properties": {
+      "passengerId": {
+        "type": "string",
+        "description": "Unique identifier for the passenger"
+      },
+      "firstName": {
+        "type": "string",
+        "description": "First name of the passenger"
+      },
+      "lastName": {
+        "type": "string",
+        "description": "Last name of the passenger"
+      },
+      "email": {
+        "type": "string",
+        "format": "email",
+        "description": "Email address of the passenger"
+      },
+      "bookingId": {
+        "$ref": "common.json/#/BookingId"
+      },
+      "flights": {
+        "type": "array",
+        "description": "List of flights associated with the passenger",
+        "items": {
+          "$ref": "flight.json/#/FlightInfo"
+        }
+      }
+    },
+    "required": [
+      "passengerId",
+      "firstName",
+      "lastName",
+      "email",
+      "bookingId",
+      "flights"
+    ]
+  }
+}

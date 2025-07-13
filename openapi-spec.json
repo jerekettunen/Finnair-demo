@@ -1,0 +1,146 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "CrewPas API",
+    "version": "1.0.0",
+    "description": "API for getting information of the passengers, bookings and flights to inflight crew"
+  },
+  "paths": {
+    "/passengers": {
+      "get": {
+        "parameters": [
+          {
+            "name": "flightNumber",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "departureDate",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        ],
+        "operationId": "getPassengers",
+        "summary": "Get Passengers",
+        "description": "Retrieve a list of passengers for a specific flight and departure date.",
+        "responses": {
+          "200": {
+            "description": "List of passengers retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PassengerSummary"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request parameters"
+          },
+          "404": {
+            "description": "Flight not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "x-amazon-apigateway-integration": {
+        "uri": "arn:aws:apigateway:{{region}}:lambda:path/2015-03-31/functions/{{get_flight_passengers_function_arn}}/invocations",
+        "httpMethod": "POST",
+        "type": "aws_proxy",
+        "passthroughBehavior": "when_no_match",
+        "responses": {
+          "default": {
+            "statusCode": "200"
+          }
+        }
+      }
+    },
+    "/passengers/{passengerId}": {
+      "get": {
+        "parameters": [
+          {
+            "name": "passengerId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The unique identifier of the passenger"
+          }
+        ],
+        "operationId": "getPassengerById",
+        "summary": "Get Passenger Information",
+        "description": "Retrieve information about a specific passenger by their ID.",
+        "responses": {
+          "200": {
+            "description": "Passenger information retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PassengerDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid passenger ID"
+          },
+          "404": {
+            "description": "Passenger not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "x-amazon-apigateway-integration": {
+        "uri": "arn:aws:apigateway:{{region}}:lambda:path/2015-03-31/functions/{{get_passenger_function_arn}}/invocations",
+        "httpMethod": "POST",
+        "type": "aws_proxy",
+        "passthroughBehavior": "when_no_match",
+        "responses": {
+          "default": {
+            "statusCode": "200"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PassengerSummary": {
+        "$ref": "./schemas/passenger.json/#/PassengerSummary"
+      },
+      "PassengerDetails": {
+        "$ref": "./schemas/passenger.json/#/PassengerDetails"
+      },
+      "FlightInfo": {
+        "$ref": "./schemas/flight.json/#/FlightInfo"
+      },
+      "Booking": {
+        "$ref": "./schemas/booking.json/#/Booking"
+      },
+      "BookingId": {
+        "$ref": "./schemas/common.json/#/BookingId"
+      },
+      "FlightNumber": {
+        "$ref": "./schemas/common.json/#/FlightNumber"
+      },
+      "AirportCode": {
+        "$ref": "./schemas/common.json/#/AirportCode"
+      }
+    }
+  }
+}

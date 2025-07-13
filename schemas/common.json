@@ -1,0 +1,21 @@
+{
+  "AirportCode": {
+    "type": "string",
+    "minLength": 3,
+    "maxLength": 3,
+    "pattern": "^[A-Z]{3}$",
+    "description": "IATA airport code"
+  },
+  "BookingId": {
+    "type": "string",
+    "minLength": 6,
+    "maxLength": 6,
+    "pattern": "^[A-Z0-9]{6}$",
+    "description": "Booking identifier"
+  },
+  "FlightNumber": {
+    "type": "string",
+    "pattern": "^[A-Z]{2}[0-9]{1,4}$",
+    "description": "Flight number with carrier code"
+  }
+}

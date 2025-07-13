@@ -1,0 +1,38 @@
+{
+  "FlightInfo": {
+    "type": "object",
+    "properties": {
+      "flightNumber": {
+        "$ref": "common.json/#/FlightNumber"
+      },
+      "departureAirport": {
+        "$ref": "common.json/#/AirportCode"
+      },
+      "arrivalAirport": {
+        "$ref": "common.json/#/AirportCode"
+      },
+      "departureDate": {
+        "type": "string",
+        "format": "date"
+      },
+      "arrivalDate": {
+        "type": "string",
+        "format": "date"
+      },
+      "bookings": {
+        "type": "array",
+        "items": {
+          "$ref": "common.json/#/BookingId"
+        }
+      }
+    },
+    "required": [
+      "flightNumber",
+      "departureAirport",
+      "arrivalAirport",
+      "departureDate",
+      "arrivalDate",
+      "bookings"
+    ]
+  }
+}

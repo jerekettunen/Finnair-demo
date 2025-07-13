@@ -1,0 +1,27 @@
+{
+  "Booking": {
+    "type": "object",
+    "properties": {
+      "bookingId": {
+        "$ref": "common.json/#/BookingId"
+      },
+      "passengerIds": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "flightIds": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "bookingDate": {
+        "type": "string",
+        "format": "date"
+      }
+    },
+    "required": ["bookingId", "passengerIds", "flightIds", "bookingDate"]
+  }
+}
