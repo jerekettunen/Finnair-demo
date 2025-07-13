@@ -106,6 +106,11 @@ export class FinnairStack extends cdk.Stack {
       },
     })
 
+    console.log('🔍 Lambda Function ARNs:')
+    console.log('getPassengers ARN:', getPassengers.functionArn)
+    console.log('getPassengerById ARN:', getPassengerById.functionArn)
+    console.log('seedDataLambda ARN:', seedDataLambda.functionArn)
+
     //Permissions for reading tables
     flightsTable.grantReadData(getPassengers)
     flightBookingTable.grantReadData(getPassengers)
@@ -135,16 +140,42 @@ export class FinnairStack extends cdk.Stack {
     // Create the API Gateway using OpenAPI specification
     const variables = {
       region: 'eu-north-1',
-      get_passenger_function_arn: getPassengerById.functionArn,
-      get_flight_passengers_function_arn: getPassengers.functionArn,
-      seed_data_function_arn: seedDataLambda.functionArn,
+      get_passenger_function_arn: this.resolve(getPassengerById.functionArn),
+      get_flight_passengers_function_arn: this.resolve(
+        getPassengers.functionArn
+      ),
+      seed_data_function_arn: this.resolve(seedDataLambda.functionArn),
     }
-    const openApiSpecJson = this.resolve(
-      Mustache.render(
-        readFileSync(path.join(__dirname, '../openapi-spec.json'), 'utf8'),
-        variables
-      )
+
+    console.log('🔍 Mustache variables:', JSON.stringify(variables, null, 2))
+
+    const renderedSpec = Mustache.render(
+      readFileSync(path.join(__dirname, '../openapi-spec.json'), 'utf8'),
+      variables
     )
+
+    console.log('🔍 Rendered OpenAPI spec (first 1000 chars):', renderedSpec)
+    console.log('🔍 Looking for integration URIs:')
+    console.log(
+      'Passengers integration:',
+      renderedSpec.includes('get_flight_passengers_function_arn')
+        ? '❌ NOT REPLACED'
+        : '✅ REPLACED'
+    )
+    console.log(
+      'Passenger by ID integration:',
+      renderedSpec.includes('get_passenger_function_arn')
+        ? '❌ NOT REPLACED'
+        : '✅ REPLACED'
+    )
+    console.log(
+      'Seed integration:',
+      renderedSpec.includes('seed_data_function_arn')
+        ? '❌ NOT REPLACED'
+        : '✅ REPLACED'
+    )
+
+    const openApiSpecJson = JSON.parse(renderedSpec) // Parse to object
 
     const api = new apigateway.SpecRestApi(this, 'CrewPasApi', {
       apiDefinition: apigateway.ApiDefinition.fromInline(openApiSpecJson),
@@ -155,17 +186,13 @@ export class FinnairStack extends cdk.Stack {
       },
     })
 
-    const admin = api.root.addResource('admin')
-    const seed = admin.addResource('seed')
-    seed.addMethod('POST', new apigateway.LambdaIntegration(seedDataLambda))
-
     new cdk.CfnOutput(this, 'ApiUrl', {
       value: api.url,
       description: 'CrewPas API URL',
     })
 
     new cdk.CfnOutput(this, 'SeedDataUrl', {
-      value: `${api.url}admin/seed`,
+      value: `${api.url}utils/seed`,
       description: 'URL to seed mock data (POST request)',
     })
 
@@ -173,7 +200,7 @@ export class FinnairStack extends cdk.Stack {
       value: JSON.stringify({
         getPassengers: `${api.url}passengers?flightNumber=AY123&departureDate=2024-01-15`,
         getPassengerById: `${api.url}passengers/PAX001`,
-        seedData: `${api.url}admin/seed`,
+        seedData: `${api.url}utils/seed`,
       }),
       description: 'Test endpoints for the API',
     })

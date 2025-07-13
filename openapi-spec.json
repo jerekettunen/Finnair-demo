@@ -116,30 +116,131 @@
           }
         }
       }
+    },
+    "/utils/seed": {
+      "post": {
+        "operationId": "seedData",
+        "summary": "Seed Database",
+        "description": "Populate the database with test data.",
+        "responses": {
+          "200": {
+            "description": "Database seeded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SeedResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "x-amazon-apigateway-integration": {
+        "uri": "arn:aws:apigateway:{{region}}:lambda:path/2015-03-31/functions/{{seed_data_function_arn}}/invocations",
+        "httpMethod": "POST",
+        "type": "aws_proxy",
+        "passthroughBehavior": "when_no_match",
+        "responses": {
+          "default": {
+            "statusCode": "200"
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
       "PassengerSummary": {
-        "$ref": "./schemas/passenger.json/#/PassengerSummary"
+        "type": "object",
+        "properties": {
+          "passengerId": { "type": "string" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "bookingId": { "type": "string", "minLength": 6, "maxLength": 6 }
+        },
+        "required": ["passengerId", "firstName", "lastName", "bookingId"]
       },
       "PassengerDetails": {
-        "$ref": "./schemas/passenger.json/#/PassengerDetails"
+        "type": "object",
+        "properties": {
+          "passengerId": { "type": "string" },
+          "firstName": { "type": "string" },
+          "lastName": { "type": "string" },
+          "email": { "type": "string", "format": "email" },
+          "bookingId": { "type": "string", "minLength": 6, "maxLength": 6 },
+          "flights": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/FlightInfo" }
+          }
+        },
+        "required": [
+          "passengerId",
+          "firstName",
+          "lastName",
+          "email",
+          "bookingId",
+          "flights"
+        ]
       },
       "FlightInfo": {
-        "$ref": "./schemas/flight.json/#/FlightInfo"
-      },
-      "Booking": {
-        "$ref": "./schemas/booking.json/#/Booking"
-      },
-      "BookingId": {
-        "$ref": "./schemas/common.json/#/BookingId"
-      },
-      "FlightNumber": {
-        "$ref": "./schemas/common.json/#/FlightNumber"
+        "type": "object",
+        "properties": {
+          "flightNumber": { "type": "string" },
+          "departureAirport": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 3
+          },
+          "arrivalAirport": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 3
+          },
+          "departureDate": { "type": "string", "format": "date" },
+          "arrivalDate": { "type": "string", "format": "date" }
+        },
+        "required": [
+          "flightNumber",
+          "departureAirport",
+          "arrivalAirport",
+          "departureDate",
+          "arrivalDate"
+        ]
       },
       "AirportCode": {
-        "$ref": "./schemas/common.json/#/AirportCode"
+        "type": "string",
+        "minLength": 3,
+        "maxLength": 3,
+        "pattern": "^[A-Z]{3}$"
+      },
+      "FlightNumber": {
+        "type": "string",
+        "pattern": "^[A-Z]{2}[0-9]{1,4}$"
+      },
+      "BookingId": {
+        "type": "string",
+        "minLength": 6,
+        "maxLength": 6
+      },
+      "SeedResponse": {
+        "type": "object",
+        "properties": {
+          "message": { "type": "string" },
+          "timestamp": { "type": "string", "format": "date-time" },
+          "summary": {
+            "type": "object",
+            "properties": {
+              "flights": { "type": "number" },
+              "passengers": { "type": "number" },
+              "bookings": { "type": "number" },
+              "relationships": { "type": "string" }
+            }
+          }
+        },
+        "required": ["message", "timestamp", "summary"]
       }
     }
   }

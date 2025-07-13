@@ -9,10 +9,11 @@
     "watch": "tsc -w",
     "test": "jest",
     "test-local": "ts-node src/mockdata-test.ts",
-    "cdk": "cdk",
+    "cdk": "cdk --profile cdk-admin",
     "generate-types": "npx openapi-typescript ./openapi-spec.json -o ./types/openapi.d.ts",
-    "deploy": "cdk deploy --outputs-file cdk-outputs.json",
-    "destroy": "cdk destroy"
+    "deploy": "cdk deploy --profile cdk-admin --outputs-file cdk-outputs.json",
+    "destroy": "cdk destroy --profile cdk-admin",
+    "synth": "cdk synth --profile cdk-admin"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.150",
