@@ -13,7 +13,8 @@
     "generate-types": "npx openapi-typescript ./openapi-spec.json -o ./types/openapi.d.ts",
     "deploy": "cdk deploy --profile cdk-admin --outputs-file cdk-outputs.json",
     "destroy": "cdk destroy --profile cdk-admin",
-    "synth": "cdk synth --profile cdk-admin"
+    "synth": "cdk synth --profile cdk-admin",
+    "demo": "ts-node demo.ts"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.150",
@@ -30,6 +31,7 @@
     "@aws-sdk/client-dynamodb": "^3.844.0",
     "@aws-sdk/lib-dynamodb": "^3.844.0",
     "aws-cdk-lib": "2.202.0",
+    "axios": "^1.10.0",
     "constructs": "^10.0.0",
     "mustache": "^4.2.0",
     "openapi-typescript": "^7.8.0"

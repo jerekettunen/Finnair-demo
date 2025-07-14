@@ -1,14 +1,8 @@
-# Welcome to your CDK TypeScript project
+Demo REST API for Finnair Interview
 
-This is a blank project for CDK development with TypeScript.
+## Used
 
-The `cdk.json` file tells the CDK Toolkit how to execute your app.
-
-## Useful commands
-
-* `npm run build`   compile typescript to js
-* `npm run watch`   watch for changes and compile
-* `npm run test`    perform the jest unit tests
-* `npx cdk deploy`  deploy this stack to your default AWS account/region
-* `npx cdk diff`    compare deployed stack with current state
-* `npx cdk synth`   emits the synthesized CloudFormation template
+- AWS (cdk, Lambda, DynamoDB, API Gateway)
+- Written in typescript
+- OpenAPI
+- Automatically generated base types
