@@ -24,7 +24,8 @@ export class PassengerService {
 
   async getPassengersForFlight(
     flightNumber: string,
-    departureDate: string
+    departureDate: string,
+    getConnecting?: string
   ): Promise<PassengerSummary[]> {
     validateFlightNumber(flightNumber)
     validateDepartureDate(departureDate)
@@ -39,10 +40,24 @@ export class PassengerService {
       )
     }
 
-    const bookingIds =
+    let bookingIds =
       await this.flightBookingRepository.findBookingIdsByFlightId(
         flight.flightId
       )
+
+    const filteredBookingIds = []
+
+    if (getConnecting === 'true') {
+      for (const bookingId of bookingIds) {
+        const flightInBooking =
+          await this.flightBookingRepository.findFlightsByBookingId(bookingId)
+        if (flightInBooking.length > 1) {
+          // If there are multiple flights in the booking, we consider it a connecting flight
+          filteredBookingIds.push(bookingId)
+        }
+      }
+      bookingIds = filteredBookingIds
+    }
 
     if (bookingIds.length === 0) {
       logger.info(`No bookings found for flight ${flight.flightId}`)

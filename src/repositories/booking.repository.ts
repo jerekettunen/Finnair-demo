@@ -8,7 +8,6 @@ import {
 } from '@aws-sdk/lib-dynamodb'
 import { components } from '../../types/openapi'
 
-export type Booking = components['schemas']['Booking']
 export interface BookingRecord {
   bookingId: string // Primary key
   passengerCount: number

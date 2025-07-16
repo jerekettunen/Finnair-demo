@@ -106,7 +106,7 @@ export class FinnairStack extends cdk.Stack {
       },
     })
 
-    // console.log('🔍 Lambda Function ARNs:')
+    // console.log('Lambda Function ARNs:')
     // console.log('getPassengers ARN:', getPassengers.functionArn)
     // console.log('getPassengerById ARN:', getPassengerById.functionArn)
     // console.log('seedDataLambda ARN:', seedDataLambda.functionArn)
