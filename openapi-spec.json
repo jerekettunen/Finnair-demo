@@ -25,6 +25,14 @@
               "type": "string",
               "format": "date"
             }
+          },
+          {
+            "name": "getConnecting",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "operationId": "getPassengers",

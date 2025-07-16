@@ -31,7 +31,6 @@ export class MockDataSeeder {
         arrivalAirport: 'LHR',
         departureDate: '2024-01-15',
         arrivalDate: '2024-01-15',
-        bookings: [],
       })
 
       const flight2 = await this.flightRepo.create({
@@ -40,7 +39,6 @@ export class MockDataSeeder {
         arrivalAirport: 'JFK',
         departureDate: '2024-01-15', // Same day connection
         arrivalDate: '2024-01-15',
-        bookings: [],
       })
 
       const flight3 = await this.flightRepo.create({
@@ -49,7 +47,6 @@ export class MockDataSeeder {
         arrivalAirport: 'CDG',
         departureDate: '2024-01-15', // Same day as AY123
         arrivalDate: '2024-01-15',
-        bookings: [],
       })
 
       // Return flights
@@ -59,7 +56,6 @@ export class MockDataSeeder {
         arrivalAirport: 'HEL',
         departureDate: '2024-01-16',
         arrivalDate: '2024-01-16',
-        bookings: [],
       })
 
       const flight5 = await this.flightRepo.create({
@@ -68,7 +64,6 @@ export class MockDataSeeder {
         arrivalAirport: 'LHR',
         departureDate: '2024-01-16',
         arrivalDate: '2024-01-16',
-        bookings: [],
       })
 
       // Asian routes
@@ -78,7 +73,6 @@ export class MockDataSeeder {
         arrivalAirport: 'NRT',
         departureDate: '2024-01-15',
         arrivalDate: '2024-01-16', // Next day arrival
-        bookings: [],
       })
 
       const flight7 = await this.flightRepo.create({
@@ -87,7 +81,6 @@ export class MockDataSeeder {
         arrivalAirport: 'HEL',
         departureDate: '2024-01-17',
         arrivalDate: '2024-01-17',
-        bookings: [],
       })
 
       // Domestic Scandinavia
@@ -97,7 +90,6 @@ export class MockDataSeeder {
         arrivalAirport: 'ARN',
         departureDate: '2024-01-15',
         arrivalDate: '2024-01-15',
-        bookings: [],
       })
 
       // ===== BOOKINGS =====

@@ -10,6 +10,7 @@ import { FlightBookingRepository } from '../src/repositories/flightbooking.repos
 import { PassengerRepository } from '../src/repositories/passenger.repository'
 import { getDynamoDBClient } from '../src/utils/dynamodb.client'
 import { logger } from '../src/utils/logger'
+import { get } from 'axios'
 
 // Initialize repositories and services
 const dynamoClient = getDynamoDBClient()
@@ -29,14 +30,17 @@ export const handler = async (
     logger.info('Processing request to get passengers for flight', {
       flightNumber: getQueryParameter(event, 'flightNumber'),
       departureDate: getQueryParameter(event, 'departureDate'),
+      getConnecting: getQueryParameter(event, 'getConnecting'),
     })
 
     const flightNumber = getQueryParameter(event, 'flightNumber')
     const departureDate = getQueryParameter(event, 'departureDate')
+    const getConnecting = getQueryParameter(event, 'getConnecting')
 
     const passengers = await passengerService.getPassengersForFlight(
       flightNumber,
-      departureDate
+      departureDate,
+      getConnecting
     )
 
     return createSuccessResponse(passengers)
